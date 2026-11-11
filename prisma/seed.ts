@@ -19,20 +19,22 @@ async function main() {
     data: { nome: 'Unidade Londrina', cidade: 'Londrina', uf: 'PR', endereco: 'Av. Higienópolis, 200' },
   });
 
-  const produtos = await Promise.all(
-    [
-      { nome: 'X-Burger', categoria: 'LANCHE', precoCentavos: 2590, descricao: 'Pão, hambúrguer 150g, queijo e molho da casa' },
-      { nome: 'X-Salada', categoria: 'LANCHE', precoCentavos: 2790, descricao: 'X-Burger com alface e tomate' },
-      { nome: 'X-Bacon', categoria: 'LANCHE', precoCentavos: 3190, descricao: 'Hambúrguer 150g, queijo e bacon crocante' },
-      { nome: 'Veggie Burger', categoria: 'LANCHE', precoCentavos: 2990, descricao: 'Hambúrguer de grão-de-bico' },
-      { nome: 'Batata Frita M', categoria: 'ACOMPANHAMENTO', precoCentavos: 1290 },
-      { nome: 'Onion Rings', categoria: 'ACOMPANHAMENTO', precoCentavos: 1490 },
-      { nome: 'Refrigerante Lata', categoria: 'BEBIDA', precoCentavos: 690 },
-      { nome: 'Suco Natural 500ml', categoria: 'BEBIDA', precoCentavos: 990 },
-      { nome: 'Milkshake Chocolate', categoria: 'SOBREMESA', precoCentavos: 1890 },
-      { nome: 'Combo X-Burger', categoria: 'COMBO', precoCentavos: 3990, descricao: 'X-Burger + Batata M + Refrigerante' },
-    ].map((p) => prisma.produto.create({ data: p })),
-  );
+  const catalogo = [
+    { nome: 'X-Burger', categoria: 'LANCHE', precoCentavos: 2590, descricao: 'Pão, hambúrguer 150g, queijo e molho da casa' },
+    { nome: 'X-Salada', categoria: 'LANCHE', precoCentavos: 2790, descricao: 'X-Burger com alface e tomate' },
+    { nome: 'X-Bacon', categoria: 'LANCHE', precoCentavos: 3190, descricao: 'Hambúrguer 150g, queijo e bacon crocante' },
+    { nome: 'Veggie Burger', categoria: 'LANCHE', precoCentavos: 2990, descricao: 'Hambúrguer de grão-de-bico' },
+    { nome: 'Batata Frita M', categoria: 'ACOMPANHAMENTO', precoCentavos: 1290 },
+    { nome: 'Onion Rings', categoria: 'ACOMPANHAMENTO', precoCentavos: 1490 },
+    { nome: 'Refrigerante Lata', categoria: 'BEBIDA', precoCentavos: 690 },
+    { nome: 'Suco Natural 500ml', categoria: 'BEBIDA', precoCentavos: 990 },
+    { nome: 'Milkshake Chocolate', categoria: 'SOBREMESA', precoCentavos: 1890 },
+    { nome: 'Combo X-Burger', categoria: 'COMBO', precoCentavos: 3990, descricao: 'X-Burger + Batata M + Refrigerante' },
+  ];
+  // sequencial pra manter os ids na ordem da lista (a coleção do postman usa esses ids)
+  const produtos = [];
+  for (const p of catalogo) produtos.push(await prisma.produto.create({ data: p }));
+
   const [xBurger, xSalada, xBacon, veggie, batata, onion, refri, suco, milkshake, combo] = produtos;
 
   // cada unidade tem seu próprio estoque; o que não está aqui não aparece no cardápio da unidade
