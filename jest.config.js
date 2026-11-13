@@ -1,6 +1,6 @@
 const base = {
   moduleFileExtensions: ['js', 'json', 'ts'],
-  transform: { '^.+\.ts$': ['ts-jest', { isolatedModules: true }] },
+  transform: { '^.+\.ts$': 'ts-jest' },
   testEnvironment: 'node',
   rootDir: '.',
 };
