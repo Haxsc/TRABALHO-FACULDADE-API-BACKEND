@@ -25,7 +25,7 @@ export class AuthController {
   @Post('login')
   @Publico()
   @HttpCode(200)
-  @Throttle({ default: { limit: 10, ttl: 60_000 } })
+  @Throttle({ default: { limit: Number(process.env.LOGIN_RATE_LIMIT ?? 30), ttl: 60_000 } })
   @ApiOperation({ summary: 'Login', description: 'Autentica com e-mail e senha e devolve access token (JWT) e refresh token.' })
   @ApiResponse({ status: 200, type: TokenDto })
   @RespostasErro(401, 422, 429)

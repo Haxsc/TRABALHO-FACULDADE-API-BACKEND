@@ -1,0 +1,3425 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "HealthController_verificar",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Verifica se a API e o banco estão respondendo",
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/auth/registrar": {
+      "post": {
+        "description": "Cria uma conta com perfil CLIENTE e registra o consentimento de fidelidade (LGPD).",
+        "operationId": "AuthController_registrar",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistroDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Conta criada"
+          },
+          "409": {
+            "description": "Conflito com regra de negócio",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Cadastro de cliente",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "description": "Autentica com e-mail e senha e devolve access token (JWT) e refresh token.",
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Limite de tentativas excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Login",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "description": "Troca um refresh token válido por um novo par de tokens (o anterior é revogado).",
+        "operationId": "AuthController_refresh",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Renovar token",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "description": "Revoga o refresh token informado (ou todos do usuário).",
+        "operationId": "AuthController_logout",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogoutDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Logout",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/usuarios/me": {
+      "get": {
+        "operationId": "UsuariosController_me",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Meus dados cadastrais",
+        "tags": [
+          "Usuários / LGPD"
+        ]
+      },
+      "patch": {
+        "operationId": "UsuariosController_atualizar",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AtualizarPerfilDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Atualizar meus dados (nome/telefone)",
+        "tags": [
+          "Usuários / LGPD"
+        ]
+      },
+      "delete": {
+        "description": "Dados pessoais são anonimizados; pedidos são mantidos sem identificação por obrigação fiscal.",
+        "operationId": "UsuariosController_excluir",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito com regra de negócio",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Excluir minha conta (anonimização - LGPD)",
+        "tags": [
+          "Usuários / LGPD"
+        ]
+      }
+    },
+    "/usuarios/me/consentimentos": {
+      "get": {
+        "operationId": "UsuariosController_consentimentos",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Histórico de consentimentos (LGPD)",
+        "tags": [
+          "Usuários / LGPD"
+        ]
+      },
+      "post": {
+        "description": "Cada alteração gera um novo registro (prova do consentimento) e um log de auditoria.",
+        "operationId": "UsuariosController_alterarConsentimento",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConsentimentoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Histórico atualizado"
+          },
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Conceder ou revogar consentimento",
+        "tags": [
+          "Usuários / LGPD"
+        ]
+      }
+    },
+    "/usuarios/me/exportar": {
+      "get": {
+        "operationId": "UsuariosController_exportar",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Exportar meus dados (portabilidade - LGPD art. 18)",
+        "tags": [
+          "Usuários / LGPD"
+        ]
+      }
+    },
+    "/usuarios": {
+      "get": {
+        "description": "E-mail e telefone retornam mascarados. O acesso é registrado na auditoria.",
+        "operationId": "UsuariosController_listar",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "perfil",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "CLIENTE",
+                "ATENDENTE",
+                "COZINHA",
+                "GERENTE",
+                "ADMIN"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar usuários (ADMIN)",
+        "tags": [
+          "Usuários / LGPD"
+        ]
+      },
+      "post": {
+        "operationId": "UsuariosController_criar",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CriarColaboradorDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito com regra de negócio",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Cadastrar colaborador (ADMIN)",
+        "tags": [
+          "Usuários / LGPD"
+        ]
+      }
+    },
+    "/unidades": {
+      "get": {
+        "operationId": "UnidadesController_listar",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cidade",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "Curitiba",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Listar unidades da rede",
+        "tags": [
+          "Unidades"
+        ]
+      },
+      "post": {
+        "operationId": "UnidadesController_criar",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CriarUnidadeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Cadastrar unidade (ADMIN)",
+        "tags": [
+          "Unidades"
+        ]
+      }
+    },
+    "/unidades/{id}": {
+      "get": {
+        "operationId": "UnidadesController_obter",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Requisição mal formada (JSON ou parâmetro inválido)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Detalhar unidade",
+        "tags": [
+          "Unidades"
+        ]
+      }
+    },
+    "/unidades/{id}/cardapio": {
+      "get": {
+        "description": "Produtos ativos que a unidade trabalha, com indicação de disponibilidade conforme o estoque local.",
+        "operationId": "UnidadesController_cardapio",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "categoria",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "LANCHE",
+                "ACOMPANHAMENTO",
+                "BEBIDA",
+                "SOBREMESA",
+                "COMBO"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Requisição mal formada (JSON ou parâmetro inválido)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Cardápio da unidade",
+        "tags": [
+          "Unidades"
+        ]
+      }
+    },
+    "/produtos": {
+      "get": {
+        "operationId": "ProdutosController_listar",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "categoria",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "LANCHE",
+                "ACOMPANHAMENTO",
+                "BEBIDA",
+                "SOBREMESA",
+                "COMBO"
+              ]
+            }
+          },
+          {
+            "name": "incluirInativos",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Listar produtos do catálogo",
+        "tags": [
+          "Produtos"
+        ]
+      },
+      "post": {
+        "description": "O catálogo é definido pela matriz.",
+        "operationId": "ProdutosController_criar",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CriarProdutoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito com regra de negócio",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Cadastrar produto (ADMIN)",
+        "tags": [
+          "Produtos"
+        ]
+      }
+    },
+    "/produtos/{id}": {
+      "get": {
+        "operationId": "ProdutosController_obter",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Requisição mal formada (JSON ou parâmetro inválido)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Detalhar produto",
+        "tags": [
+          "Produtos"
+        ]
+      },
+      "patch": {
+        "operationId": "ProdutosController_atualizar",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AtualizarProdutoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Requisição mal formada (JSON ou parâmetro inválido)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Atualizar produto (ADMIN)",
+        "tags": [
+          "Produtos"
+        ]
+      },
+      "delete": {
+        "description": "Exclusão lógica: o produto sai do cardápio mas continua nos pedidos antigos.",
+        "operationId": "ProdutosController_remover",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "Requisição mal formada (JSON ou parâmetro inválido)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Desativar produto (ADMIN)",
+        "tags": [
+          "Produtos"
+        ]
+      }
+    },
+    "/promocoes": {
+      "get": {
+        "description": "Informe unidadeId para incluir campanhas locais da unidade.",
+        "operationId": "PromocoesController_listar",
+        "parameters": [
+          {
+            "name": "unidadeId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": 2,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Promoções vigentes",
+        "tags": [
+          "Promoções"
+        ]
+      },
+      "post": {
+        "operationId": "PromocoesController_criar",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CriarPromocaoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito com regra de negócio",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Criar promoção/campanha (ADMIN)",
+        "tags": [
+          "Promoções"
+        ]
+      }
+    },
+    "/estoque": {
+      "get": {
+        "description": "Equipe da loja só consulta a própria unidade.",
+        "operationId": "EstoqueController_consultar",
+        "parameters": [
+          {
+            "name": "unidadeId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "abaixoDoMinimo",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Saldo de estoque da unidade",
+        "tags": [
+          "Estoque"
+        ]
+      }
+    },
+    "/estoque/movimentacoes": {
+      "post": {
+        "description": "SAIDA não pode deixar o saldo negativo (409).",
+        "operationId": "EstoqueController_movimentar",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MovimentarEstoqueDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito com regra de negócio",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Registrar entrada/saída de estoque",
+        "tags": [
+          "Estoque"
+        ]
+      },
+      "get": {
+        "operationId": "EstoqueController_movimentacoes",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "unidadeId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "produtoId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": 9,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Histórico de movimentações da unidade",
+        "tags": [
+          "Estoque"
+        ]
+      }
+    },
+    "/pedidos": {
+      "post": {
+        "description": "Valida canal, unidade, produtos e estoque; aplica promoção e pontos; reserva o estoque e deixa o pedido AGUARDANDO_PAGAMENTO.",
+        "operationId": "PedidosController_criar",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "description": "Chave única por operação. Reenviar a mesma chave devolve o recurso já criado (200) em vez de duplicar.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CriarPedidoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Mesma Idempotency-Key: pedido já existente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PedidoRespostaDto"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PedidoRespostaDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito com regra de negócio",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Criar pedido",
+        "tags": [
+          "Pedidos"
+        ]
+      },
+      "get": {
+        "description": "Filtros por canalPedido, status, unidade e período. Cliente vê só os próprios; equipe vê só a própria unidade.",
+        "operationId": "PedidosController_listar",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "canalPedido",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "TOTEM",
+              "type": "string",
+              "enum": [
+                "APP",
+                "TOTEM",
+                "BALCAO",
+                "PICKUP",
+                "WEB"
+              ]
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "AGUARDANDO_PAGAMENTO",
+                "PAGAMENTO_RECUSADO",
+                "EM_PREPARO",
+                "PRONTO",
+                "ENTREGUE",
+                "CANCELADO"
+              ]
+            }
+          },
+          {
+            "name": "unidadeId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "dataInicio",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "2026-01-01",
+              "type": "string"
+            }
+          },
+          {
+            "name": "dataFim",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "2026-12-31",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginaPedidosDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar pedidos",
+        "tags": [
+          "Pedidos"
+        ]
+      }
+    },
+    "/pedidos/resumo-por-canal": {
+      "get": {
+        "description": "Quantidade e valor dos pedidos não cancelados por canal de origem.",
+        "operationId": "PedidosController_resumo",
+        "parameters": [
+          {
+            "name": "unidadeId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Consolidado de pedidos por canal",
+        "tags": [
+          "Pedidos"
+        ]
+      }
+    },
+    "/pedidos/{id}": {
+      "get": {
+        "operationId": "PedidosController_obter",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Requisição mal formada (JSON ou parâmetro inválido)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Detalhar pedido (com histórico de status)",
+        "tags": [
+          "Pedidos"
+        ]
+      }
+    },
+    "/pedidos/{id}/status": {
+      "patch": {
+        "description": "EM_PREPARO -> PRONTO (cozinha/gerente) e PRONTO -> ENTREGUE (atendente/gerente). Pagamento é quem tira o pedido de AGUARDANDO_PAGAMENTO.",
+        "operationId": "PedidosController_status",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AtualizarStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Requisição mal formada (JSON ou parâmetro inválido)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito com regra de negócio",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Atualizar status",
+        "tags": [
+          "Pedidos"
+        ]
+      }
+    },
+    "/pedidos/{id}/cancelar": {
+      "post": {
+        "description": "Devolve o estoque e os pontos. Se já estiver pago, só GERENTE/ADMIN cancelam e o pagamento é estornado no gateway.",
+        "operationId": "PedidosController_cancelar",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelarPedidoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Requisição mal formada (JSON ou parâmetro inválido)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito com regra de negócio",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Cancelar pedido",
+        "tags": [
+          "Pedidos"
+        ]
+      }
+    },
+    "/pedidos/{id}/pagamentos": {
+      "get": {
+        "operationId": "PedidosController_pagamentosDoPedido",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Requisição mal formada (JSON ou parâmetro inválido)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Tentativas de pagamento do pedido",
+        "tags": [
+          "Pedidos"
+        ]
+      }
+    },
+    "/pagamentos": {
+      "post": {
+        "description": "Envia a cobrança ao gateway simulado. APROVADO move o pedido para EM_PREPARO e credita pontos; RECUSADO move para PAGAMENTO_RECUSADO (permite nova tentativa). Falha temporária do gateway é re-tentada automaticamente; se persistir, retorna 503 e o pedido continua aguardando pagamento.",
+        "operationId": "PagamentosController_solicitar",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "description": "Chave única por operação. Reenviar a mesma chave devolve o recurso já criado (200) em vez de duplicar.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitarPagamentoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Mesma Idempotency-Key: pagamento já processado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagamentoRespostaDto"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Pagamento processado (APROVADO ou RECUSADO — ver campo status)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagamentoRespostaDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito com regra de negócio",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço externo (gateway de pagamento) indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solicitar pagamento (gateway mock)",
+        "tags": [
+          "Pagamentos"
+        ]
+      }
+    },
+    "/pagamentos/{id}": {
+      "get": {
+        "operationId": "PagamentosController_obter",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagamentoRespostaDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição mal formada (JSON ou parâmetro inválido)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recurso não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Consultar pagamento",
+        "tags": [
+          "Pagamentos"
+        ]
+      }
+    },
+    "/fidelidade/saldo": {
+      "get": {
+        "operationId": "FidelidadeController_saldo",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Saldo de pontos e regras do programa",
+        "tags": [
+          "Fidelidade"
+        ]
+      }
+    },
+    "/fidelidade/extrato": {
+      "get": {
+        "operationId": "FidelidadeController_extrato",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "example": 10,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Extrato de pontos (acúmulos, resgates e estornos)",
+        "tags": [
+          "Fidelidade"
+        ]
+      }
+    },
+    "/auditoria": {
+      "get": {
+        "description": "Ações sensíveis: login, pedidos, status, pagamentos, estoque, consentimentos e acesso a dados pessoais.",
+        "operationId": "AuditoriaController_listar",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "acao",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "PEDIDO_CRIADO",
+              "type": "string"
+            }
+          },
+          {
+            "name": "entidade",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "Pedido",
+              "type": "string"
+            }
+          },
+          {
+            "name": "entidadeId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "usuarioId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": 2,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Erro de validação dos campos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Consultar trilha de auditoria",
+        "tags": [
+          "Auditoria"
+        ]
+      }
+    },
+    "/auditoria/expurgo": {
+      "post": {
+        "description": "Remove registros mais antigos que AUDIT_RETENTION_DAYS.",
+        "operationId": "AuditoriaController_expurgo",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Token ausente, inválido ou expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Perfil sem permissão para a operação/unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Expurgar logs fora do prazo de retenção (ADMIN)",
+        "tags": [
+          "Auditoria"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "API Rede de Lanchonetes",
+    "description": "API back-end multicanal (APP, TOTEM, BALCAO, PICKUP, WEB) para uma rede de lanchonetes com matriz e unidades.\n\n**Fluxo principal:** login → cardápio da unidade → criar pedido → pagamento (mock) → cozinha (PRONTO) → atendente (ENTREGUE).\n\n**Autenticação:** use `POST /auth/login` e clique em *Authorize* informando o `accessToken`.\nUsuários do seed (senha `Senha@123`): admin@lanchonete.com, gerente@lanchonete.com, atendente@lanchonete.com, cozinha@lanchonete.com, maria@email.com, joao@email.com.\n\n**Pagamento mock (tokenPagamento):** `tok_aprovado`, `tok_recusado`, `tok_cartao_bloqueado`, `tok_indisponivel` (503), `tok_instavel` (falha e aprova na retentativa).\n\n**Erros:** todas as falhas seguem o formato `{ error, message, details[], timestamp, path, requestId }`.",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "RegistroDto": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "Carlos Pereira"
+          },
+          "email": {
+            "type": "string",
+            "example": "carlos@email.com"
+          },
+          "senha": {
+            "type": "string",
+            "example": "Senha@123",
+            "description": "Mínimo 8 caracteres, com letra maiúscula, minúscula e número"
+          },
+          "telefone": {
+            "type": "string",
+            "example": "41988887777"
+          },
+          "aceitaFidelidade": {
+            "type": "boolean",
+            "example": true,
+            "description": "Consentimento para participar do programa de fidelidade"
+          }
+        },
+        "required": [
+          "nome",
+          "email",
+          "senha"
+        ]
+      },
+      "DetalheErroDto": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string",
+            "example": "itens[0].quantidade"
+          },
+          "issue": {
+            "type": "string",
+            "example": "Disponível: 1"
+          }
+        },
+        "required": [
+          "field",
+          "issue"
+        ]
+      },
+      "ErroDto": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "ESTOQUE_INSUFICIENTE"
+          },
+          "message": {
+            "type": "string",
+            "example": "Não há quantidade suficiente para um ou mais itens."
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DetalheErroDto"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "example": "2026-02-05T12:00:00.000Z"
+          },
+          "path": {
+            "type": "string",
+            "example": "/pedidos"
+          },
+          "requestId": {
+            "type": "string",
+            "example": "6f1c2e0a-9b7d-4c1e-8f5a-2d3b4c5d6e7f"
+          }
+        },
+        "required": [
+          "error",
+          "message",
+          "details",
+          "timestamp",
+          "path",
+          "requestId"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "maria@email.com"
+          },
+          "senha": {
+            "type": "string",
+            "example": "Senha@123"
+          }
+        },
+        "required": [
+          "email",
+          "senha"
+        ]
+      },
+      "UsuarioLogadoDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 6
+          },
+          "nome": {
+            "type": "string",
+            "example": "Maria Silva"
+          },
+          "perfil": {
+            "type": "string",
+            "example": "CLIENTE"
+          },
+          "unidadeId": {
+            "type": "object",
+            "example": null,
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "nome",
+          "perfil",
+          "unidadeId"
+        ]
+      },
+      "TokenDto": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIs..."
+          },
+          "refreshToken": {
+            "type": "string",
+            "example": "9c1e5b..."
+          },
+          "tokenType": {
+            "type": "string",
+            "example": "Bearer"
+          },
+          "expiresIn": {
+            "type": "number",
+            "example": 3600
+          },
+          "user": {
+            "$ref": "#/components/schemas/UsuarioLogadoDto"
+          }
+        },
+        "required": [
+          "accessToken",
+          "refreshToken",
+          "tokenType",
+          "expiresIn",
+          "user"
+        ]
+      },
+      "RefreshDto": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "example": "3f9a...c21"
+          }
+        },
+        "required": [
+          "refreshToken"
+        ]
+      },
+      "LogoutDto": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "description": "Se omitido, revoga todas as sessões do usuário"
+          }
+        }
+      },
+      "AtualizarPerfilDto": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "Maria S. Silva"
+          },
+          "telefone": {
+            "type": "string",
+            "example": "41999990000"
+          }
+        }
+      },
+      "ConsentimentoDto": {
+        "type": "object",
+        "properties": {
+          "finalidade": {
+            "type": "string",
+            "enum": [
+              "FIDELIDADE",
+              "MARKETING"
+            ],
+            "example": "FIDELIDADE"
+          },
+          "aceito": {
+            "type": "boolean",
+            "example": true
+          },
+          "canal": {
+            "type": "string",
+            "example": "APP"
+          }
+        },
+        "required": [
+          "finalidade",
+          "aceito"
+        ]
+      },
+      "CriarColaboradorDto": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "Ana Atendente"
+          },
+          "email": {
+            "type": "string",
+            "example": "ana@lanchonete.com"
+          },
+          "senha": {
+            "type": "string",
+            "example": "Senha@123"
+          },
+          "perfil": {
+            "type": "string",
+            "enum": [
+              "CLIENTE",
+              "ATENDENTE",
+              "COZINHA",
+              "GERENTE",
+              "ADMIN"
+            ],
+            "example": "ATENDENTE"
+          },
+          "unidadeId": {
+            "type": "number",
+            "example": 1,
+            "description": "Obrigatório para ATENDENTE, COZINHA e GERENTE"
+          }
+        },
+        "required": [
+          "nome",
+          "email",
+          "senha",
+          "perfil"
+        ]
+      },
+      "CriarUnidadeDto": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "Unidade Água Verde"
+          },
+          "cidade": {
+            "type": "string",
+            "example": "Curitiba"
+          },
+          "uf": {
+            "type": "string",
+            "example": "PR"
+          },
+          "endereco": {
+            "type": "string",
+            "example": "Av. República Argentina, 3000"
+          }
+        },
+        "required": [
+          "nome",
+          "cidade",
+          "uf",
+          "endereco"
+        ]
+      },
+      "CriarProdutoDto": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "X-Frango"
+          },
+          "descricao": {
+            "type": "string",
+            "example": "Filé de frango empanado, alface e maionese"
+          },
+          "categoria": {
+            "type": "string",
+            "enum": [
+              "LANCHE",
+              "ACOMPANHAMENTO",
+              "BEBIDA",
+              "SOBREMESA",
+              "COMBO"
+            ],
+            "example": "LANCHE"
+          },
+          "preco": {
+            "type": "number",
+            "example": 28.9,
+            "description": "Preço em reais"
+          }
+        },
+        "required": [
+          "nome",
+          "categoria",
+          "preco"
+        ]
+      },
+      "AtualizarProdutoDto": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "X-Frango Especial"
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "categoria": {
+            "type": "string",
+            "enum": [
+              "LANCHE",
+              "ACOMPANHAMENTO",
+              "BEBIDA",
+              "SOBREMESA",
+              "COMBO"
+            ]
+          },
+          "preco": {
+            "type": "number",
+            "example": 29.9
+          },
+          "ativo": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "CriarPromocaoDto": {
+        "type": "object",
+        "properties": {
+          "codigo": {
+            "type": "string",
+            "example": "COMBO20"
+          },
+          "descricao": {
+            "type": "string",
+            "example": "20% de desconto em pedidos acima de R$ 50"
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "PERCENTUAL",
+              "VALOR_FIXO"
+            ],
+            "example": "PERCENTUAL"
+          },
+          "valor": {
+            "type": "number",
+            "example": 20,
+            "description": "Percentual (1-100) ou valor em reais"
+          },
+          "valorMinimo": {
+            "type": "number",
+            "example": 50
+          },
+          "unidadeId": {
+            "type": "number",
+            "example": null,
+            "description": "Vazio = vale para toda a rede"
+          },
+          "inicio": {
+            "type": "string",
+            "example": "2026-01-01T00:00:00Z"
+          },
+          "fim": {
+            "type": "string",
+            "example": "2026-12-31T23:59:59Z"
+          }
+        },
+        "required": [
+          "codigo",
+          "descricao",
+          "tipo",
+          "valor",
+          "inicio",
+          "fim"
+        ]
+      },
+      "MovimentarEstoqueDto": {
+        "type": "object",
+        "properties": {
+          "unidadeId": {
+            "type": "number",
+            "example": 1
+          },
+          "produtoId": {
+            "type": "number",
+            "example": 9
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "ENTRADA",
+              "SAIDA"
+            ],
+            "example": "ENTRADA"
+          },
+          "quantidade": {
+            "type": "number",
+            "example": 20
+          },
+          "motivo": {
+            "type": "string",
+            "example": "Reposição do fornecedor"
+          }
+        },
+        "required": [
+          "unidadeId",
+          "produtoId",
+          "tipo",
+          "quantidade"
+        ]
+      },
+      "ItemPedidoDto": {
+        "type": "object",
+        "properties": {
+          "produtoId": {
+            "type": "number",
+            "example": 1
+          },
+          "quantidade": {
+            "type": "number",
+            "example": 2
+          }
+        },
+        "required": [
+          "produtoId",
+          "quantidade"
+        ]
+      },
+      "CriarPedidoDto": {
+        "type": "object",
+        "properties": {
+          "canalPedido": {
+            "type": "string",
+            "enum": [
+              "APP",
+              "TOTEM",
+              "BALCAO",
+              "PICKUP",
+              "WEB"
+            ],
+            "example": "TOTEM",
+            "description": "Canal de origem do pedido (obrigatório)"
+          },
+          "unidadeId": {
+            "type": "number",
+            "example": 1
+          },
+          "clienteId": {
+            "type": "number",
+            "example": 6,
+            "description": "Para CLIENTE é sempre o próprio usuário. Equipe da loja pode informar ou omitir (balcão sem cadastro)."
+          },
+          "itens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemPedidoDto"
+            }
+          },
+          "formaPagamento": {
+            "type": "string",
+            "enum": [
+              "PIX",
+              "CARTAO_CREDITO",
+              "CARTAO_DEBITO",
+              "MOCK"
+            ],
+            "example": "PIX"
+          },
+          "codigoPromocao": {
+            "type": "string",
+            "example": "BEMVINDO10"
+          },
+          "pontosResgatar": {
+            "type": "number",
+            "example": 20,
+            "description": "Múltiplos de 10. 10 pontos = R$ 1,00"
+          },
+          "observacao": {
+            "type": "string",
+            "example": "Sem cebola"
+          }
+        },
+        "required": [
+          "canalPedido",
+          "unidadeId",
+          "itens",
+          "formaPagamento"
+        ]
+      },
+      "ItemPedidoRespostaDto": {
+        "type": "object",
+        "properties": {
+          "produtoId": {
+            "type": "number",
+            "example": 1
+          },
+          "nome": {
+            "type": "string",
+            "example": "X-Burger"
+          },
+          "quantidade": {
+            "type": "number",
+            "example": 2
+          },
+          "precoUnitario": {
+            "type": "number",
+            "example": 25.9
+          },
+          "subtotal": {
+            "type": "number",
+            "example": 51.8
+          }
+        },
+        "required": [
+          "produtoId",
+          "nome",
+          "quantidade",
+          "precoUnitario",
+          "subtotal"
+        ]
+      },
+      "PedidoRespostaDto": {
+        "type": "object",
+        "properties": {
+          "pedidoId": {
+            "type": "number",
+            "example": 1
+          },
+          "unidadeId": {
+            "type": "number",
+            "example": 1
+          },
+          "clienteId": {
+            "type": "object",
+            "example": 6,
+            "nullable": true
+          },
+          "canalPedido": {
+            "type": "string",
+            "enum": [
+              "APP",
+              "TOTEM",
+              "BALCAO",
+              "PICKUP",
+              "WEB"
+            ],
+            "example": "TOTEM"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "AGUARDANDO_PAGAMENTO",
+              "PAGAMENTO_RECUSADO",
+              "EM_PREPARO",
+              "PRONTO",
+              "ENTREGUE",
+              "CANCELADO"
+            ],
+            "example": "AGUARDANDO_PAGAMENTO"
+          },
+          "formaPagamento": {
+            "type": "string",
+            "enum": [
+              "PIX",
+              "CARTAO_CREDITO",
+              "CARTAO_DEBITO",
+              "MOCK"
+            ],
+            "example": "PIX"
+          },
+          "itens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemPedidoRespostaDto"
+            }
+          },
+          "subtotal": {
+            "type": "number",
+            "example": 64.7
+          },
+          "descontoPromocao": {
+            "type": "number",
+            "example": 6.47
+          },
+          "descontoPontos": {
+            "type": "number",
+            "example": 0
+          },
+          "total": {
+            "type": "number",
+            "example": 58.23
+          },
+          "codigoPromocao": {
+            "type": "object",
+            "example": "BEMVINDO10",
+            "nullable": true
+          },
+          "pontosResgatados": {
+            "type": "number",
+            "example": 0
+          },
+          "observacao": {
+            "type": "object",
+            "example": "Sem cebola",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2026-02-05T12:00:00.000Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2026-02-05T12:00:00.000Z"
+          }
+        },
+        "required": [
+          "pedidoId",
+          "unidadeId",
+          "clienteId",
+          "canalPedido",
+          "status",
+          "formaPagamento",
+          "itens",
+          "subtotal",
+          "descontoPromocao",
+          "descontoPontos",
+          "total",
+          "codigoPromocao",
+          "pontosResgatados",
+          "observacao",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "MetaPaginacao": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number",
+            "example": 1
+          },
+          "limit": {
+            "type": "number",
+            "example": 10
+          },
+          "total": {
+            "type": "number",
+            "example": 42
+          },
+          "totalPages": {
+            "type": "number",
+            "example": 5
+          }
+        },
+        "required": [
+          "page",
+          "limit",
+          "total",
+          "totalPages"
+        ]
+      },
+      "PaginaPedidosDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PedidoRespostaDto"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/MetaPaginacao"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ]
+      },
+      "AtualizarStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "PRONTO",
+              "ENTREGUE"
+            ],
+            "example": "PRONTO"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "CancelarPedidoDto": {
+        "type": "object",
+        "properties": {
+          "motivo": {
+            "type": "string",
+            "example": "Cliente desistiu"
+          }
+        }
+      },
+      "SolicitarPagamentoDto": {
+        "type": "object",
+        "properties": {
+          "pedidoId": {
+            "type": "number",
+            "example": 1
+          },
+          "metodo": {
+            "type": "string",
+            "enum": [
+              "PIX",
+              "CARTAO_CREDITO",
+              "CARTAO_DEBITO",
+              "MOCK"
+            ],
+            "example": "PIX"
+          },
+          "tokenPagamento": {
+            "type": "string",
+            "example": "tok_aprovado",
+            "description": "Token simulado: tok_aprovado | tok_recusado | tok_cartao_bloqueado | tok_indisponivel | tok_instavel"
+          }
+        },
+        "required": [
+          "pedidoId",
+          "metodo",
+          "tokenPagamento"
+        ]
+      },
+      "PagamentoRespostaDto": {
+        "type": "object",
+        "properties": {
+          "pagamentoId": {
+            "type": "number",
+            "example": 1
+          },
+          "pedidoId": {
+            "type": "number",
+            "example": 1
+          },
+          "status": {
+            "type": "string",
+            "example": "APROVADO",
+            "enum": [
+              "PENDENTE",
+              "APROVADO",
+              "RECUSADO",
+              "ERRO",
+              "ESTORNADO"
+            ]
+          },
+          "metodo": {
+            "type": "string",
+            "example": "PIX"
+          },
+          "valor": {
+            "type": "number",
+            "example": 58.23
+          },
+          "provedor": {
+            "type": "string",
+            "example": "MOCK_GATEWAY"
+          },
+          "transacaoExternaId": {
+            "type": "string",
+            "example": "mock_7d0f..."
+          },
+          "codigoRetorno": {
+            "type": "string",
+            "example": "00"
+          },
+          "mensagem": {
+            "type": "string",
+            "example": "Transação aprovada"
+          },
+          "tentativas": {
+            "type": "number",
+            "example": 1
+          },
+          "respostaGateway": {
+            "type": "object",
+            "example": {
+              "aprovado": true,
+              "transacaoId": "mock_7d0f...",
+              "codigo": "00",
+              "mensagem": "Transação aprovada",
+              "processadoEm": "2026-02-05T12:00:01.000Z"
+            }
+          },
+          "statusPedido": {
+            "type": "string",
+            "example": "EM_PREPARO"
+          },
+          "pontosAcumulados": {
+            "type": "number",
+            "example": 58
+          }
+        },
+        "required": [
+          "pagamentoId",
+          "pedidoId",
+          "status",
+          "metodo",
+          "valor",
+          "provedor",
+          "transacaoExternaId",
+          "codigoRetorno",
+          "mensagem",
+          "tentativas",
+          "respostaGateway",
+          "statusPedido",
+          "pontosAcumulados"
+        ]
+      }
+    }
+  }
+}
