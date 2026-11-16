@@ -1,0 +1,57 @@
+erDiagram
+    direction TB
+    UNIDADE ||--o{ USUARIO : "lota colaboradores"
+    USUARIO |o--o{ PEDIDO : "cliente de"
+    USUARIO ||--o{ PEDIDO : "criado por"
+    USUARIO ||--o{ TRANSACAO_FIDELIDADE : "acumula/resgata"
+    PEDIDO |o--o{ TRANSACAO_FIDELIDADE : "gera"
+    USUARIO ||--o{ CONSENTIMENTO : "concede/revoga"
+    USUARIO ||--o{ REFRESH_TOKEN : "sessoes"
+    USUARIO |o--o{ LOG_AUDITORIA : "executa"
+    USUARIO {
+        int id PK
+        string nome
+        string email UK
+        string senhaHash
+        string telefone
+        string perfil
+        int unidadeId FK
+        boolean consentimentoFidelidade
+        boolean ativo
+        datetime anonimizadoEm
+    }
+    CONSENTIMENTO {
+        int id PK
+        int usuarioId FK
+        string finalidade
+        boolean aceito
+        string versaoTermo
+        string canal
+        datetime registradoEm
+    }
+    REFRESH_TOKEN {
+        int id PK
+        int usuarioId FK
+        string tokenHash UK
+        datetime expiraEm
+        datetime revogadoEm
+    }
+    TRANSACAO_FIDELIDADE {
+        int id PK
+        int usuarioId FK
+        int pedidoId FK
+        string tipo
+        int pontos
+    }
+    LOG_AUDITORIA {
+        int id PK
+        int usuarioId FK
+        string perfil
+        string acao
+        string entidade
+        string entidadeId
+        string detalhes
+        string ip
+        string requestId
+        datetime criadoEm
+    }

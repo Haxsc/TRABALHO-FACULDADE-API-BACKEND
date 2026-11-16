@@ -1,4 +1,5 @@
 erDiagram
+    direction TB
     UNIDADE ||--o{ ESTOQUE : "possui estoque proprio"
     PRODUTO ||--o{ ESTOQUE : "estocado em"
     UNIDADE ||--o{ PEDIDO : "recebe"
@@ -33,10 +34,10 @@ erDiagram
         int id PK
         string nome
         string email UK
-        string senhaHash "bcrypt"
-        string telefone "opcional"
-        string perfil "CLIENTE|ATENDENTE|COZINHA|GERENTE|ADMIN"
-        int unidadeId FK "nulo p/ cliente e admin"
+        string senhaHash
+        string telefone
+        string perfil
+        int unidadeId FK
         boolean consentimentoFidelidade
         boolean ativo
         datetime anonimizadoEm
@@ -44,7 +45,7 @@ erDiagram
     CONSENTIMENTO {
         int id PK
         int usuarioId FK
-        string finalidade "FIDELIDADE|MARKETING"
+        string finalidade
         boolean aceito
         string versaoTermo
         string canal
@@ -53,7 +54,7 @@ erDiagram
     REFRESH_TOKEN {
         int id PK
         int usuarioId FK
-        string tokenHash UK "sha256"
+        string tokenHash UK
         datetime expiraEm
         datetime revogadoEm
     }
@@ -66,37 +67,37 @@ erDiagram
     }
     ESTOQUE {
         int id PK
-        int unidadeId FK "UK(unidadeId, produtoId)"
+        int unidadeId FK
         int produtoId FK
-        int quantidade "nunca negativa"
+        int quantidade
         int quantidadeMinima
     }
     MOVIMENTACAO_ESTOQUE {
         int id PK
         int unidadeId FK
         int produtoId FK
-        string tipo "ENTRADA|SAIDA|VENDA|ESTORNO"
+        string tipo
         int quantidade
         int saldoApos
-        int pedidoId FK "opcional"
+        int pedidoId FK
         int usuarioId
     }
     PROMOCAO {
         int id PK
         string codigo UK
-        string tipo "PERCENTUAL|VALOR_FIXO"
+        string tipo
         int valor
         int valorMinimoCentavos
-        int unidadeId FK "nulo = rede toda"
+        int unidadeId FK
         datetime inicio
         datetime fim
     }
     PEDIDO {
         int id PK
         int unidadeId FK
-        int clienteId FK "nulo no balcao"
+        int clienteId FK
         int criadoPorId FK
-        string canalPedido "APP|TOTEM|BALCAO|PICKUP|WEB"
+        string canalPedido
         string status
         string formaPagamento
         int subtotalCentavos
@@ -112,7 +113,7 @@ erDiagram
         int pedidoId FK
         int produtoId FK
         int quantidade
-        int precoUnitarioCentavos "preco congelado"
+        int precoUnitarioCentavos
         int subtotalCentavos
     }
     HISTORICO_STATUS_PEDIDO {
@@ -129,7 +130,7 @@ erDiagram
         int pedidoId FK
         string metodo
         int valorCentavos
-        string status "PENDENTE|APROVADO|RECUSADO|ERRO|ESTORNADO"
+        string status
         string provedor
         string transacaoExternaId
         string codigoRetorno
@@ -141,8 +142,8 @@ erDiagram
         int id PK
         int usuarioId FK
         int pedidoId FK
-        string tipo "ACUMULO|RESGATE|ESTORNO|BONUS"
-        int pontos "saldo = soma"
+        string tipo
+        int pontos
     }
     LOG_AUDITORIA {
         int id PK
@@ -151,7 +152,7 @@ erDiagram
         string acao
         string entidade
         string entidadeId
-        string detalhes "sem dados pessoais"
+        string detalhes
         string ip
         string requestId
         datetime criadoEm

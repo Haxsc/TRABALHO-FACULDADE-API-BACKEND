@@ -1,0 +1,106 @@
+erDiagram
+    direction TB
+    UNIDADE ||--o{ ESTOQUE : "possui estoque proprio"
+    PRODUTO ||--o{ ESTOQUE : "estocado em"
+    UNIDADE ||--o{ PEDIDO : "recebe"
+    UNIDADE ||--o{ USUARIO : "lota colaboradores"
+    UNIDADE |o--o{ PROMOCAO : "campanha local"
+    UNIDADE ||--o{ MOVIMENTACAO_ESTOQUE : "registra"
+    PRODUTO ||--o{ MOVIMENTACAO_ESTOQUE : "movimentado"
+    USUARIO |o--o{ PEDIDO : "cliente de"
+    USUARIO ||--o{ PEDIDO : "criado por"
+    PEDIDO ||--|{ ITEM_PEDIDO : "contem"
+    PRODUTO ||--o{ ITEM_PEDIDO : "vendido em"
+    PEDIDO ||--o{ PAGAMENTO : "tentativas"
+    PEDIDO ||--|{ HISTORICO_STATUS_PEDIDO : "rastreia"
+    PROMOCAO |o--o{ PEDIDO : "aplicada em"
+    PEDIDO |o--o{ MOVIMENTACAO_ESTOQUE : "origina"
+    UNIDADE {
+        int id PK
+        string nome
+        string cidade
+        string uf
+        string endereco
+        boolean ehMatriz
+        boolean ativa
+    }
+    PRODUTO {
+        int id PK
+        string nome UK
+        string categoria
+        int precoCentavos
+        boolean ativo
+    }
+    ESTOQUE {
+        int id PK
+        int unidadeId FK
+        int produtoId FK
+        int quantidade
+        int quantidadeMinima
+    }
+    MOVIMENTACAO_ESTOQUE {
+        int id PK
+        int unidadeId FK
+        int produtoId FK
+        string tipo
+        int quantidade
+        int saldoApos
+        int pedidoId FK
+        int usuarioId
+    }
+    PEDIDO {
+        int id PK
+        int unidadeId FK
+        int clienteId FK
+        int criadoPorId FK
+        string canalPedido
+        string status
+        string formaPagamento
+        int subtotalCentavos
+        int descontoPromoCentavos
+        int descontoPontosCentavos
+        int totalCentavos
+        int pontosResgatados
+        int promocaoId FK
+        string idempotencyKey UK
+    }
+    ITEM_PEDIDO {
+        int id PK
+        int pedidoId FK
+        int produtoId FK
+        int quantidade
+        int precoUnitarioCentavos
+        int subtotalCentavos
+    }
+    PAGAMENTO {
+        int id PK
+        int pedidoId FK
+        string metodo
+        int valorCentavos
+        string status
+        string provedor
+        string transacaoExternaId
+        string codigoRetorno
+        string payloadRetorno
+        int tentativas
+        string idempotencyKey UK
+    }
+    HISTORICO_STATUS_PEDIDO {
+        int id PK
+        int pedidoId FK
+        string statusAnterior
+        string statusNovo
+        int usuarioId
+        string motivo
+        datetime criadoEm
+    }
+    PROMOCAO {
+        int id PK
+        string codigo UK
+        string tipo
+        int valor
+        int valorMinimoCentavos
+        int unidadeId FK
+        datetime inicio
+        datetime fim
+    }
