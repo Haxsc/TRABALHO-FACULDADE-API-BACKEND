@@ -1,0 +1,158 @@
+erDiagram
+    UNIDADE ||--o{ ESTOQUE : "possui estoque proprio"
+    PRODUTO ||--o{ ESTOQUE : "estocado em"
+    UNIDADE ||--o{ PEDIDO : "recebe"
+    UNIDADE ||--o{ USUARIO : "lota colaboradores"
+    UNIDADE |o--o{ PROMOCAO : "campanha local"
+    UNIDADE ||--o{ MOVIMENTACAO_ESTOQUE : "registra"
+    PRODUTO ||--o{ MOVIMENTACAO_ESTOQUE : "movimentado"
+    USUARIO |o--o{ PEDIDO : "cliente de"
+    USUARIO ||--o{ PEDIDO : "criado por"
+    PEDIDO ||--|{ ITEM_PEDIDO : "contem"
+    PRODUTO ||--o{ ITEM_PEDIDO : "vendido em"
+    PEDIDO ||--o{ PAGAMENTO : "tentativas"
+    PEDIDO ||--|{ HISTORICO_STATUS_PEDIDO : "rastreia"
+    PROMOCAO |o--o{ PEDIDO : "aplicada em"
+    PEDIDO |o--o{ MOVIMENTACAO_ESTOQUE : "origina"
+    USUARIO ||--o{ TRANSACAO_FIDELIDADE : "acumula/resgata"
+    PEDIDO |o--o{ TRANSACAO_FIDELIDADE : "gera"
+    USUARIO ||--o{ CONSENTIMENTO : "concede/revoga"
+    USUARIO ||--o{ REFRESH_TOKEN : "sessoes"
+    USUARIO |o--o{ LOG_AUDITORIA : "executa"
+
+    UNIDADE {
+        int id PK
+        string nome
+        string cidade
+        string uf
+        string endereco
+        boolean ehMatriz
+        boolean ativa
+    }
+    USUARIO {
+        int id PK
+        string nome
+        string email UK
+        string senhaHash "bcrypt"
+        string telefone "opcional"
+        string perfil "CLIENTE|ATENDENTE|COZINHA|GERENTE|ADMIN"
+        int unidadeId FK "nulo p/ cliente e admin"
+        boolean consentimentoFidelidade
+        boolean ativo
+        datetime anonimizadoEm
+    }
+    CONSENTIMENTO {
+        int id PK
+        int usuarioId FK
+        string finalidade "FIDELIDADE|MARKETING"
+        boolean aceito
+        string versaoTermo
+        string canal
+        datetime registradoEm
+    }
+    REFRESH_TOKEN {
+        int id PK
+        int usuarioId FK
+        string tokenHash UK "sha256"
+        datetime expiraEm
+        datetime revogadoEm
+    }
+    PRODUTO {
+        int id PK
+        string nome UK
+        string categoria
+        int precoCentavos
+        boolean ativo
+    }
+    ESTOQUE {
+        int id PK
+        int unidadeId FK "UK(unidadeId, produtoId)"
+        int produtoId FK
+        int quantidade "nunca negativa"
+        int quantidadeMinima
+    }
+    MOVIMENTACAO_ESTOQUE {
+        int id PK
+        int unidadeId FK
+        int produtoId FK
+        string tipo "ENTRADA|SAIDA|VENDA|ESTORNO"
+        int quantidade
+        int saldoApos
+        int pedidoId FK "opcional"
+        int usuarioId
+    }
+    PROMOCAO {
+        int id PK
+        string codigo UK
+        string tipo "PERCENTUAL|VALOR_FIXO"
+        int valor
+        int valorMinimoCentavos
+        int unidadeId FK "nulo = rede toda"
+        datetime inicio
+        datetime fim
+    }
+    PEDIDO {
+        int id PK
+        int unidadeId FK
+        int clienteId FK "nulo no balcao"
+        int criadoPorId FK
+        string canalPedido "APP|TOTEM|BALCAO|PICKUP|WEB"
+        string status
+        string formaPagamento
+        int subtotalCentavos
+        int descontoPromoCentavos
+        int descontoPontosCentavos
+        int totalCentavos
+        int pontosResgatados
+        int promocaoId FK
+        string idempotencyKey UK
+    }
+    ITEM_PEDIDO {
+        int id PK
+        int pedidoId FK
+        int produtoId FK
+        int quantidade
+        int precoUnitarioCentavos "preco congelado"
+        int subtotalCentavos
+    }
+    HISTORICO_STATUS_PEDIDO {
+        int id PK
+        int pedidoId FK
+        string statusAnterior
+        string statusNovo
+        int usuarioId
+        string motivo
+        datetime criadoEm
+    }
+    PAGAMENTO {
+        int id PK
+        int pedidoId FK
+        string metodo
+        int valorCentavos
+        string status "PENDENTE|APROVADO|RECUSADO|ERRO|ESTORNADO"
+        string provedor
+        string transacaoExternaId
+        string codigoRetorno
+        string payloadRetorno
+        int tentativas
+        string idempotencyKey UK
+    }
+    TRANSACAO_FIDELIDADE {
+        int id PK
+        int usuarioId FK
+        int pedidoId FK
+        string tipo "ACUMULO|RESGATE|ESTORNO|BONUS"
+        int pontos "saldo = soma"
+    }
+    LOG_AUDITORIA {
+        int id PK
+        int usuarioId FK
+        string perfil
+        string acao
+        string entidade
+        string entidadeId
+        string detalhes "sem dados pessoais"
+        string ip
+        string requestId
+        datetime criadoEm
+    }

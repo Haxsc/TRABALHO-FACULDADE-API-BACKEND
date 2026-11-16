@@ -1,0 +1,116 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='1500' height='1020' viewBox='0 0 1500 1020'>
+<defs><marker id='seta' viewBox='0 0 10 10' refX='10' refY='5' markerWidth='9' markerHeight='9' orient='auto'><path d='M0,0 L10,5 L0,10 z' fill='#333'/></marker></defs>
+<rect width='1500' height='1020' fill='white'/>
+<rect x='40' y='20' width='1420' height='120' rx='10' fill='#f3f3f3' stroke='#555' stroke-width='1.3'/>
+<text x='60' y='47.666666666666664' font-family='Arial, Helvetica, sans-serif' font-size='17' font-weight='bold' text-anchor='start' fill='#111'>Canais (clientes da API)</text>
+<rect x='60.0' y='76' width='264.8' height='48' rx='6' fill='white' stroke='#777'/>
+<text x='192.4' y='104.33333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>App</text>
+<rect x='338.8' y='76' width='264.8' height='48' rx='6' fill='white' stroke='#777'/>
+<text x='471.20000000000005' y='104.33333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>Totem</text>
+<rect x='617.6' y='76' width='264.8' height='48' rx='6' fill='white' stroke='#777'/>
+<text x='750.0' y='104.33333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>Web</text>
+<rect x='896.4' y='76' width='264.8' height='48' rx='6' fill='white' stroke='#777'/>
+<text x='1028.8000000000002' y='104.33333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>Balcão / PDV</text>
+<rect x='1175.2' y='76' width='264.8' height='48' rx='6' fill='white' stroke='#777'/>
+<text x='1307.6000000000001' y='104.33333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>Pickup</text>
+<line x1='750' y1='140' x2='750' y2='180' stroke='#333' stroke-width='2' marker-end='url(#seta)'/>
+<text x='762' y='164.33333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='start' fill='#333'>HTTP + JSON  ·  Authorization: Bearer &lt;JWT&gt;  ·  Idempotency-Key</text>
+<rect x='40' y='180' width='1420' height='170' rx='10' fill='#e8f0fe' stroke='#555' stroke-width='1.3'/>
+<text x='60' y='207.66666666666666' font-family='Arial, Helvetica, sans-serif' font-size='17' font-weight='bold' text-anchor='start' fill='#111'>API (Interface) — src/api</text>
+<text x='60' y='228.33333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='start' fill='#444'>contratos de request/response, autenticação/autorização e documentação OpenAPI</text>
+<rect x='60.0' y='236' width='185.1' height='98' rx='6' fill='white' stroke='#777'/>
+<text x='152.57142857142856' y='281.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>RequestId</text>
+<text x='152.57142857142856' y='297.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>Middleware</text>
+<rect x='259.1' y='236' width='185.1' height='98' rx='6' fill='white' stroke='#777'/>
+<text x='351.71428571428567' y='281.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>JwtGuard</text>
+<text x='351.71428571428567' y='297.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>(autenticação)</text>
+<rect x='458.3' y='236' width='185.1' height='98' rx='6' fill='white' stroke='#777'/>
+<text x='550.8571428571429' y='281.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>PerfisGuard</text>
+<text x='550.8571428571429' y='297.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>(autorização)</text>
+<rect x='657.4' y='236' width='185.1' height='98' rx='6' fill='white' stroke='#777'/>
+<text x='750.0' y='281.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>ValidationPipe</text>
+<text x='750.0' y='297.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>(DTOs, 422)</text>
+<rect x='856.6' y='236' width='185.1' height='98' rx='6' fill='white' stroke='#777'/>
+<text x='949.1428571428571' y='281.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>Controllers</text>
+<text x='949.1428571428571' y='297.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>(rotas REST)</text>
+<rect x='1055.7' y='236' width='185.1' height='98' rx='6' fill='white' stroke='#777'/>
+<text x='1148.2857142857144' y='281.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>FiltroErros</text>
+<text x='1148.2857142857144' y='297.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>(JSON padrão)</text>
+<rect x='1254.9' y='236' width='185.1' height='98' rx='6' fill='white' stroke='#777'/>
+<text x='1347.4285714285716' y='281.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>Swagger</text>
+<text x='1347.4285714285716' y='297.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>/docs</text>
+<line x1='750' y1='350' x2='750' y2='390' stroke='#333' stroke-width='2' marker-end='url(#seta)'/>
+<text x='762' y='374.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='start' fill='#333'>chama casos de uso</text>
+<rect x='40' y='390' width='1420' height='170' rx='10' fill='#e9f7ef' stroke='#555' stroke-width='1.3'/>
+<text x='60' y='417.6666666666667' font-family='Arial, Helvetica, sans-serif' font-size='17' font-weight='bold' text-anchor='start' fill='#111'>Application (casos de uso) — src/application</text>
+<text x='60' y='438.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='start' fill='#444'>orquestra o fluxo, abre transações e registra auditoria</text>
+<rect x='60.0' y='446' width='140.9' height='98' rx='6' fill='white' stroke='#777'/>
+<text x='130.44444444444446' y='499.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>AuthService</text>
+<rect x='214.9' y='446' width='140.9' height='98' rx='6' fill='white' stroke='#777'/>
+<text x='285.3333333333333' y='499.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>PedidosService</text>
+<rect x='369.8' y='446' width='140.9' height='98' rx='6' fill='white' stroke='#777'/>
+<text x='440.22222222222223' y='499.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>PagamentosService</text>
+<rect x='524.7' y='446' width='140.9' height='98' rx='6' fill='white' stroke='#777'/>
+<text x='595.1111111111111' y='499.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>EstoqueService</text>
+<rect x='679.6' y='446' width='140.9' height='98' rx='6' fill='white' stroke='#777'/>
+<text x='750.0' y='499.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>FidelidadeService</text>
+<rect x='834.4' y='446' width='140.9' height='98' rx='6' fill='white' stroke='#777'/>
+<text x='904.8888888888889' y='491.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>UsuariosService</text>
+<text x='904.8888888888889' y='507.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>(LGPD)</text>
+<rect x='989.3' y='446' width='140.9' height='98' rx='6' fill='white' stroke='#777'/>
+<text x='1059.7777777777776' y='499.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>CatalogoService</text>
+<rect x='1144.2' y='446' width='140.9' height='98' rx='6' fill='white' stroke='#777'/>
+<text x='1214.6666666666665' y='499.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>AuditoriaService</text>
+<rect x='1299.1' y='446' width='140.9' height='98' rx='6' fill='white' stroke='#777'/>
+<text x='1369.5555555555554' y='491.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>«porta»</text>
+<text x='1369.5555555555554' y='507.3333333333333' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>GatewayPagamento</text>
+<line x1='400' y1='560' x2='400' y2='600' stroke='#333' stroke-width='2' marker-end='url(#seta)'/>
+<text x='412' y='584.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='start' fill='#333'>usa regras</text>
+<rect x='40' y='600' width='1420' height='150' rx='10' fill='#fff4e5' stroke='#555' stroke-width='1.3'/>
+<text x='60' y='627.6666666666666' font-family='Arial, Helvetica, sans-serif' font-size='17' font-weight='bold' text-anchor='start' fill='#111'>Domain (regras de negócio puras) — src/domain</text>
+<text x='60' y='648.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='start' fill='#444'>sem dependência de framework ou banco — coberto por testes unitários</text>
+<rect x='60.0' y='656' width='185.1' height='78' rx='6' fill='white' stroke='#777'/>
+<text x='152.57142857142856' y='691.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>Enums</text>
+<text x='152.57142857142856' y='707.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>(Canal, Status...)</text>
+<rect x='259.1' y='656' width='185.1' height='78' rx='6' fill='white' stroke='#777'/>
+<text x='351.71428571428567' y='691.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>Erros de domínio</text>
+<text x='351.71428571428567' y='707.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>(404/409/422...)</text>
+<rect x='458.3' y='656' width='185.1' height='78' rx='6' fill='white' stroke='#777'/>
+<text x='550.8571428571429' y='691.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>Máquina de status</text>
+<text x='550.8571428571429' y='707.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>do pedido</text>
+<rect x='657.4' y='656' width='185.1' height='78' rx='6' fill='white' stroke='#777'/>
+<text x='750.0' y='691.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>Regras de canal</text>
+<text x='750.0' y='707.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>x perfil</text>
+<rect x='856.6' y='656' width='185.1' height='78' rx='6' fill='white' stroke='#777'/>
+<text x='949.1428571428571' y='691.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>Cálculo de</text>
+<text x='949.1428571428571' y='707.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>totais</text>
+<rect x='1055.7' y='656' width='185.1' height='78' rx='6' fill='white' stroke='#777'/>
+<text x='1148.2857142857144' y='691.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>Política de</text>
+<text x='1148.2857142857144' y='707.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>fidelidade</text>
+<rect x='1254.9' y='656' width='185.1' height='78' rx='6' fill='white' stroke='#777'/>
+<text x='1347.4285714285716' y='691.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>Política de</text>
+<text x='1347.4285714285716' y='707.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>promoção</text>
+<rect x='40' y='790' width='1420' height='150' rx='10' fill='#fdecef' stroke='#555' stroke-width='1.3'/>
+<text x='60' y='817.6666666666666' font-family='Arial, Helvetica, sans-serif' font-size='17' font-weight='bold' text-anchor='start' fill='#111'>Infrastructure — src/infrastructure</text>
+<text x='60' y='838.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='start' fill='#444'>detalhes técnicos: persistência, integrações e logs</text>
+<rect x='60.0' y='846' width='334.5' height='78' rx='6' fill='white' stroke='#777'/>
+<text x='227.25' y='881.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>PrismaService</text>
+<text x='227.25' y='897.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>(ORM)</text>
+<rect x='408.5' y='846' width='334.5' height='78' rx='6' fill='white' stroke='#777'/>
+<text x='575.75' y='881.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>RegistradorAuditoria</text>
+<text x='575.75' y='897.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>(LogAuditoria)</text>
+<rect x='757.0' y='846' width='334.5' height='78' rx='6' fill='white' stroke='#777'/>
+<text x='924.25' y='881.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>MockGatewayPagamento</text>
+<text x='924.25' y='897.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>(implementa a porta)</text>
+<rect x='1105.5' y='846' width='334.5' height='78' rx='6' fill='white' stroke='#777'/>
+<text x='1272.75' y='881.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>Contexto da requisição</text>
+<text x='1272.75' y='897.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='middle' fill='#111'>(requestId, IP)</text>
+<line x1='1440' y1='560' x2='1440' y2='790' stroke='#333' stroke-width='2' stroke-dasharray='8,5' marker-end='url(#seta)'/>
+<text x='1430' y='779.3333333333334' font-family='Arial, Helvetica, sans-serif' font-size='13' font-weight='normal' text-anchor='end' fill='#333'>usa implementações</text>
+<ellipse cx='750' cy='1004' rx='120' ry='12' fill='#ddd' stroke='#555'/>
+<rect x='630' y='968' width='240' height='36' fill='#ddd' stroke='none'/>
+<line x1='630' y1='968' x2='630' y2='1004' stroke='#555'/><line x1='870' y1='968' x2='870' y2='1004' stroke='#555'/>
+<ellipse cx='750' cy='968' rx='120' ry='14' fill='#ddd' stroke='#555'/>
+<text x='750' y='998.6666666666666' font-family='Arial, Helvetica, sans-serif' font-size='14' font-weight='bold' text-anchor='middle' fill='#111'>SQLite (migrations + seed)</text>
+<line x1='750' y1='940' x2='750' y2='954' stroke='#333' stroke-width='2' marker-end='url(#seta)'/>
+</svg>

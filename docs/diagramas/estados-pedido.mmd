@@ -1,0 +1,14 @@
+stateDiagram-v2
+    [*] --> AGUARDANDO_PAGAMENTO: POST /pedidos (estoque reservado)
+    AGUARDANDO_PAGAMENTO --> EM_PREPARO: pagamento APROVADO
+    AGUARDANDO_PAGAMENTO --> PAGAMENTO_RECUSADO: pagamento RECUSADO
+    PAGAMENTO_RECUSADO --> EM_PREPARO: nova tentativa aprovada
+    PAGAMENTO_RECUSADO --> PAGAMENTO_RECUSADO: nova tentativa recusada
+    EM_PREPARO --> PRONTO: COZINHA / GERENTE
+    PRONTO --> ENTREGUE: ATENDENTE / GERENTE
+    AGUARDANDO_PAGAMENTO --> CANCELADO: cliente ou equipe
+    PAGAMENTO_RECUSADO --> CANCELADO: cliente ou equipe
+    EM_PREPARO --> CANCELADO: GERENTE/ADMIN (estorno)
+    PRONTO --> CANCELADO: GERENTE/ADMIN (estorno)
+    ENTREGUE --> [*]
+    CANCELADO --> [*]

@@ -1,0 +1,131 @@
+classDiagram
+    direction LR
+
+    class Unidade {
+        +int id
+        +string nome
+        +string cidade
+        +boolean ehMatriz
+        +boolean ativa
+    }
+    class Usuario {
+        +int id
+        +string nome
+        +string email
+        -string senhaHash
+        +Perfil perfil
+        +int? unidadeId
+        +boolean consentimentoFidelidade
+        +anonimizar()
+    }
+    class Produto {
+        +int id
+        +string nome
+        +CategoriaProduto categoria
+        +int precoCentavos
+        +boolean ativo
+    }
+    class Estoque {
+        +int quantidade
+        +int quantidadeMinima
+        +baixar(qtd)
+        +devolver(qtd)
+    }
+    class Pedido {
+        +int id
+        +CanalPedido canalPedido
+        +StatusPedido status
+        +int subtotalCentavos
+        +int totalCentavos
+        +string? idempotencyKey
+        +aceitaPagamento() bool
+        +estaPago() bool
+    }
+    class ItemPedido {
+        +int quantidade
+        +int precoUnitarioCentavos
+    }
+    class Pagamento {
+        +int id
+        +StatusPagamento status
+        +int valorCentavos
+        +string transacaoExternaId
+        +int tentativas
+    }
+    class Promocao {
+        +string codigo
+        +TipoPromocao tipo
+        +int valor
+        +calcularDesconto(subtotal, unidade)
+    }
+    class TransacaoFidelidade {
+        +TipoTransacao tipo
+        +int pontos
+    }
+    class Consentimento {
+        +Finalidade finalidade
+        +boolean aceito
+        +string versaoTermo
+    }
+    class LogAuditoria {
+        +AcaoAuditoria acao
+        +string entidade
+        +string requestId
+    }
+
+    class MaquinaStatusPedido {
+        <<domain service>>
+        +validarTransicaoManual(atual, novo, perfil)
+        +validarTransicaoPorPagamento(atual, novo)
+        +validarCancelamento(atual, perfil)
+    }
+    class PoliticaFidelidade {
+        <<domain service>>
+        +calcularPontosAcumulados(total) int
+        +calcularDescontoPorPontos(pontos, saldo, base, consentiu) int
+    }
+    class GatewayPagamento {
+        <<interface>>
+        +cobrar(solicitacao) RespostaGateway
+        +estornar(transacaoId, valor) RespostaGateway
+    }
+    class MockGatewayPagamento {
+        +cobrar(solicitacao) RespostaGateway
+        +estornar(transacaoId, valor) RespostaGateway
+    }
+
+    class CanalPedido {
+        <<enumeration>>
+        APP
+        TOTEM
+        BALCAO
+        PICKUP
+        WEB
+    }
+    class StatusPedido {
+        <<enumeration>>
+        AGUARDANDO_PAGAMENTO
+        PAGAMENTO_RECUSADO
+        EM_PREPARO
+        PRONTO
+        ENTREGUE
+        CANCELADO
+    }
+
+    Unidade "1" --> "*" Estoque
+    Produto "1" --> "*" Estoque
+    Unidade "1" --> "*" Pedido
+    Usuario "0..1" --> "*" Pedido : cliente
+    Pedido "1" *-- "1..*" ItemPedido
+    ItemPedido "*" --> "1" Produto
+    Pedido "1" --> "*" Pagamento
+    Pedido "*" --> "0..1" Promocao
+    Usuario "1" --> "*" TransacaoFidelidade
+    Usuario "1" --> "*" Consentimento
+    Usuario "0..1" --> "*" LogAuditoria
+    Pedido ..> CanalPedido
+    Pedido ..> StatusPedido
+    MaquinaStatusPedido ..> Pedido
+    PoliticaFidelidade ..> TransacaoFidelidade
+    MockGatewayPagamento ..|> GatewayPagamento
+    Pagamento ..> GatewayPagamento

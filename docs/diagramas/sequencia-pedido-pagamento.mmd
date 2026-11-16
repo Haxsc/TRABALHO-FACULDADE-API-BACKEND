@@ -1,0 +1,50 @@
+sequenceDiagram
+    autonumber
+    actor C as Cliente (App/Totem/Web)
+    participant API as API (PedidosController / PagamentosController)
+    participant PS as PedidosService
+    participant PG as PagamentosService
+    participant DB as Banco (Prisma/SQLite)
+    participant GW as Gateway de Pagamento (Mock)
+    actor K as Cozinha
+    actor A as Atendente
+
+    C->>API: POST /auth/login
+    API-->>C: 200 accessToken (JWT)
+    C->>API: POST /pedidos {canalPedido, unidadeId, itens, formaPagamento}
+    API->>API: JwtGuard + PerfisGuard + validação do DTO (422)
+    API->>PS: criar(usuario, dados, Idempotency-Key)
+    PS->>PS: valida canal x perfil (403)
+    PS->>DB: unidade, produtos e estoque da unidade
+    alt produto/unidade inexistente
+        PS-->>API: 404
+    else estoque insuficiente
+        PS-->>API: 409 ESTOQUE_INSUFICIENTE
+    end
+    PS->>DB: [transação] cria pedido + itens + histórico, baixa estoque, log PEDIDO_CRIADO
+    API-->>C: 201 {pedidoId, status: AGUARDANDO_PAGAMENTO, total}
+
+    C->>API: POST /pagamentos {pedidoId, metodo, tokenPagamento}
+    API->>PG: solicitar()
+    PG->>DB: cria Pagamento PENDENTE
+    loop até 3 tentativas se o gateway falhar
+        PG->>GW: cobrar(valor, token)
+    end
+    alt aprovado
+        GW-->>PG: {aprovado: true, codigo 00, transacaoId}
+        PG->>DB: [transação] Pagamento APROVADO, Pedido EM_PREPARO, pontos, log
+        API-->>C: 201 {status: APROVADO, statusPedido: EM_PREPARO}
+    else recusado
+        GW-->>PG: {aprovado: false, codigo 51}
+        PG->>DB: [transação] Pagamento RECUSADO, Pedido PAGAMENTO_RECUSADO, log
+        API-->>C: 201 {status: RECUSADO, mensagem} (pode tentar de novo)
+    else gateway indisponível
+        PG->>DB: Pagamento ERRO (pedido segue AGUARDANDO_PAGAMENTO)
+        API-->>C: 503 GATEWAY_INDISPONIVEL
+    end
+
+    K->>API: PATCH /pedidos/{id}/status {PRONTO}
+    API->>PS: atualizarStatus() valida transição e perfil
+    PS->>DB: status PRONTO + histórico + log
+    A->>API: PATCH /pedidos/{id}/status {ENTREGUE}
+    PS->>DB: status ENTREGUE + histórico + log
